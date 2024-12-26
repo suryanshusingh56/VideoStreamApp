@@ -257,6 +257,7 @@ const updateUserAvatar = asyncHandler(async(req,res)=>{
         new ApiResponse(200,user,"Avatar is updated successfully")
     )
 })
+
 const updateUserCoverImage = asyncHandler(async(req,res)=>{
     const coverImageLocalPath=req.file?.path
 
@@ -284,6 +285,7 @@ const updateUserCoverImage = asyncHandler(async(req,res)=>{
         new ApiResponse(200,user,"coverImage is updated successfully")
     )
 })
+
 const getUserChannelProfile=asyncHandler(async(req,res)=>{
         const {username}=req.params
         if(!username?.trim()){
