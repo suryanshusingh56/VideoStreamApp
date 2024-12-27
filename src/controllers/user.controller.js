@@ -19,6 +19,7 @@ const generateAccessAndRefreshToken=async(userId)=>{
         throw new ApiError(500,"Something went wrong while generating refresh and access token")
     }
 }
+
 const registerUser=asyncHandler(async(req,res)=>{
   // get user details from frontend 
   //validation - not empty 
@@ -43,8 +44,8 @@ const registerUser=asyncHandler(async(req,res)=>{
    if(existedUser){
     throw new ApiError(409,"User with email or username already exist")
    }
- //   console.log(req.files)
- // console.log(req.body)
+//    console.log(req.files)
+ //  console.log(req.body)
    const avatarLocalPath = req.files?.avatar?.[0]?.path;
    const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
 
@@ -402,6 +403,36 @@ const getWatchHistory=asyncHandler(async(req,res)=>{
     )
 })
 
+const getMyVideos=asyncHandler(async(req,res)=>{
+    const getMyUploadedVideos=await User.aggregate([
+        {
+            $match:{
+                _id:req.user?._id
+            }
+        },
+        {
+            $lookup:{
+                from:"videos",
+                localField:"_id",
+                foreignField:"owner",
+                as:"myVideos"
+            }
+        },
+        {
+            $project:{
+                myVideos:1
+            }
+        }
+    ])
+    
+    if(!getMyUploadedVideos[0].length){
+        throw  new ApiError(404,"No Videos Found")
+    }
+    return res
+    .status(200)
+    .json(new ApiResponse(200,getMyUploadedVideos[0].myVideos))
+})
+
 export {registerUser,
         loginUser,
         logoutUser,
@@ -412,5 +443,6 @@ export {registerUser,
         updateUserAvatar,
         updateUserCoverImage,
         getUserChannelProfile,
-        getWatchHistory
+        getWatchHistory,
+        getMyVideos
     }

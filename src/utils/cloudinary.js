@@ -1,5 +1,7 @@
 import {v2 as cloudinary} from "cloudinary"
 import fs from "fs"
+import { ApiError } from "./ApiError.js";
+import { response } from "express";
 
     // Configuration
     cloudinary.config({ 
@@ -26,5 +28,20 @@ const uploadOnCloudinary=async (localFilePath)=>{
         return null;
     }
 }
+const deleteFromCloudinary=async (videoUrl)=>{
+    try {
+        if(!videoUrl) return null;
+        // Note::For deleting file from cloudinary the file type must
+        //  be specified otherwise it will throw error if "auto" is mentioned
+        const response=await cloudinary.uploader.destroy(videoUrl,{
+            resource_type:"video"
+        })
+        console.log("Cloudinary Deletion Response:", response);
+        return response
+    } catch (error) {
+        console.error("Error occurred while deleting from Cloudinary:", error.message)
+        throw new ApiError(400,"Error occured while deleting file")     
+    }
+}
 
-export {uploadOnCloudinary}
+export {uploadOnCloudinary,deleteFromCloudinary}
