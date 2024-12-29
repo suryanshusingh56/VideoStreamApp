@@ -81,7 +81,7 @@ const toggleCommentLike = asyncHandler(async (req, res) => { //Not Tested
 
 })
 
-const toggleTweetLike = asyncHandler(async (req, res) => {  //Not Tested
+const toggleTweetLike = asyncHandler(async (req, res) => { 
     const {tweetId} = req.params
     if(!mongoose.Types.ObjectId.isValid(tweetId)){
         throw new ApiError(400,"tweet id invalid")
