@@ -403,35 +403,6 @@ const getWatchHistory=asyncHandler(async(req,res)=>{
     )
 })
 
-const getMyVideos=asyncHandler(async(req,res)=>{
-    const getMyUploadedVideos=await User.aggregate([
-        {
-            $match:{
-                _id:req.user?._id
-            }
-        },
-        {
-            $lookup:{
-                from:"videos",
-                localField:"_id",
-                foreignField:"owner",
-                as:"myVideos"
-            }
-        },
-        {
-            $project:{
-                myVideos:1
-            }
-        }
-    ])
-    
-    if(!getMyUploadedVideos[0].length){
-        throw  new ApiError(404,"No Videos Found")
-    }
-    return res
-    .status(200)
-    .json(new ApiResponse(200,getMyUploadedVideos[0].myVideos))
-})
 
 export {registerUser,
         loginUser,
@@ -444,5 +415,4 @@ export {registerUser,
         updateUserCoverImage,
         getUserChannelProfile,
         getWatchHistory,
-        getMyVideos
     }
