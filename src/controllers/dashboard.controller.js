@@ -127,7 +127,7 @@ const getChannelVideos = asyncHandler(async (req, res) => {
         }
         return res
         .status(200)
-        .json(new ApiResponse(200,getMyUploadedVideos[0].myVideos))
+        .json(new ApiResponse(200,getMyUploadedVideos[0].myVideos,"All videos fetched successfully"))
    
     
     // Get all the videos uploaded by the channel
